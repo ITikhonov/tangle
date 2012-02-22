@@ -1,0 +1,30 @@
+
+=tangle.py
+
+Getting filename to tangle from command-line and defaulting output to stdout.
+
+-from sys import argv,stdout
+-cf=stdout
+-f=open(argv[1])
+
+Looping through all lines of file
+
+-while True:
+-	l=f.readline()
+-	if l=='': break
+
+When we encounter line starting from dash we write it to currently open file
+-	if l.startswith('-'):
+-		cf.write(l[1:])
+
+When we encounter equal sign we open named file
+-	elif l.startswith('='):
+-		if cf!=stdout: cf.close()
+-		cf=open(l[1:].strip(),'w')
+
+When we encounter plus sign we open named file for addition
+
+-	elif l.startswith('+'):
+-		if cf!=stdout: cf.close()
+-		cf=open(l[1:].strip(),'a')
+
