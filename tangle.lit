@@ -1,11 +1,16 @@
-
 =tangle.py
 
-Getting filename to tangle from command-line and defaulting output to stdout.
+Getting filename to tangle from command-line.
 
--from sys import argv,stdout
--cf=stdout
+-from sys import argv
 -f=open(argv[1])
+
+We will hold a dict of macros, represented as a list of lines each.
+
+-m={'stdout':[]}
+
+By default everything written into stdout macro, which we'll print out later.
+-cm=m['stdout']
 
 Looping through all lines of file
 
@@ -13,18 +18,32 @@ Looping through all lines of file
 -	l=f.readline()
 -	if l=='': break
 
-When we encounter line starting from dash we write it to currently open file
+When we encounter line starting from dash we append to currently selected macro
 -	if l.startswith('-'):
--		cf.write(l[1:])
+-		cm.append(l[1:])
 
-When we encounter equal sign we open named file
+When we encounter equal sign we change macro, adding new if no one already
 -	elif l.startswith('='):
--		if cf!=stdout: cf.close()
--		cf=open(l[1:].strip(),'w')
+-		name=l[1:].strip()
+-		cm=m.get(name)
+-		if not cm:
+-			cm=[]
+-			m[name]=cm
 
-When we encounter plus sign we open named file for addition
+When we encounter > sign we insert macro tag for future expansion
 
--	elif l.startswith('+'):
--		if cf!=stdout: cf.close()
--		cf=open(l[1:].strip(),'a')
+-	elif l.startswith('>'):
+-		cm.append((l[1:].strip(),))
+
+Macro expander:
+
+-def e(x):
+-	if type(x) is tuple: return e(m[x[0]])
+-	if type(x) is list: return ''.join([e(y) for y in x])
+-	return x
+
+Write out all macros:
+
+-for x,y in m.items():
+-	if '.' in x: open(x,'w').write(e(y))
 

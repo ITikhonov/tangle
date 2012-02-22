@@ -1,14 +1,23 @@
-from sys import argv,stdout
-cf=stdout
+from sys import argv
 f=open(argv[1])
+m={'stdout':[]}
+cm=m['stdout']
 while True:
 	l=f.readline()
 	if l=='': break
 	if l.startswith('-'):
-		cf.write(l[1:])
+		cm.append(l[1:])
 	elif l.startswith('='):
-		if cf!=stdout: cf.close()
-		cf=open(l[1:].strip(),'w')
-	elif l.startswith('+'):
-		if cf!=stdout: cf.close()
-		cf=open(l[1:].strip(),'a')
+		name=l[1:].strip()
+		cm=m.get(name)
+		if not cm:
+			cm=[]
+			m[name]=cm
+	elif l.startswith('>'):
+		cm.append((l[1:].strip(),))
+def e(x):
+	if type(x) is tuple: return e(m[x[0]])
+	if type(x) is list: return ''.join([e(y) for y in x])
+	return x
+for x,y in m.items():
+	if '.' in x: open(x,'w').write(e(y))
