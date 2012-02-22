@@ -1,4 +1,4 @@
-=tangle.py
+=>tangle.py
 
 Getting filename to tangle from command-line.
 
@@ -45,5 +45,5 @@ Macro expander:
 Write out all macros:
 
 -for x,y in m.items():
--	if '.' in x: open(x,'w').write(e(y))
+-	if x.startswith('>'): open(x[1:],'w').write(e(y))
 

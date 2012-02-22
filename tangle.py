@@ -20,4 +20,4 @@ def e(x):
 	if type(x) is list: return ''.join([e(y) for y in x])
 	return x
 for x,y in m.items():
-	if '.' in x: open(x,'w').write(e(y))
+	if x.startswith('>'): open(x[1:],'w').write(e(y))
