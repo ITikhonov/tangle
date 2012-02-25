@@ -17,7 +17,7 @@ while True:
 		n=l[1:]
 		cm.append((n.strip(),n[:-len(n.lstrip())]))
 def e(x,i=''):
-	if type(x) is tuple: return e(m[x[0]],x[1])
+	if type(x) is tuple: return e(m[x[0]],i+x[1])
 	if type(x) is list: return ''.join([e(y,i) for y in x])
 	return i+x
 for x,y in m.items():

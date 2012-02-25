@@ -39,7 +39,7 @@ When we encounter > sign we insert macro tag for future expansion
 Macro expander:
 
 -def e(x,i=''):
--	if type(x) is tuple: return e(m[x[0]],x[1])
+-	if type(x) is tuple: return e(m[x[0]],i+x[1])
 -	if type(x) is list: return ''.join([e(y,i) for y in x])
 -	return i+x
 
