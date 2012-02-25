@@ -14,10 +14,11 @@ while True:
 			cm=[]
 			m[name]=cm
 	elif l.startswith('>'):
-		cm.append((l[1:].strip(),))
-def e(x):
-	if type(x) is tuple: return e(m[x[0]])
-	if type(x) is list: return ''.join([e(y) for y in x])
-	return x
+		n=l[1:]
+		cm.append((n.strip(),n[:-len(n.lstrip())]))
+def e(x,i=''):
+	if type(x) is tuple: return e(m[x[0]],x[1])
+	if type(x) is list: return ''.join([e(y,i) for y in x])
+	return i+x
 for x,y in m.items():
 	if x.startswith('>'): open(x[1:],'w').write(e(y))
