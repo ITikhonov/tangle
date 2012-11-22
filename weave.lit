@@ -1,3 +1,4 @@
+		Input
 
 	Weave reads file named by first command-line argument and
 	produces html file named by second one.
@@ -11,6 +12,8 @@
 -of.write(''.join(output))
 -of.close()
 
+		Parsing
+
 	Normal text starts with single tab, paragraphs are separated
 	by an empty line.
 
@@ -19,37 +22,68 @@
 	Code block name starts with '='.
 
 =process
+-def linetype(l):
+-	if l.strip()=='': return '';
+-	if l.startswith('\t\t'): return 'h'
+-	if l.startswith('\t'): return 't'
+-	if l.startswith(('-','>')): return 'c'
+-	if l.startswith('='):
+-		linetype.id+=1
+-		return (l.strip(),str(linetype.id))
+-linetype.id=0
+
+-all=[]
+-ctype=''
+-current=[]
+-while len(code):
+-	l=code.pop(0)
+-	ntype=linetype(l)
+-	if ctype!=ntype:
+-		all.append((ctype,current))
+-		current=[]
+-		ctype=ntype
+-	current.append(l)
+
+		Collapsing code
+
+	Treat empty lines between code blocks as code
+
+=collapse
+
+		Generating HTML
+
+=generate
 -from cgi import escape
 
--output=['<p>']
--prev=''
--for i in range(len(code)):
--	l=code[i]
+-output=[]
 
--	if l.strip()=='' and (i==0 or prev.strip()!=''):
--		continue
-
--	if (not l.startswith(('-','>'))) and prev.startswith(('-','>')):
--		output.append('</pre></div>')
-
--	if l.strip()=='':
+-for (t,l) in all:
+-	if t=='':
+-		pass
+-	elif t=='h':
+-		output.append('<h2>')
+-		output.extend(l)
+-		output.append('</h2>')
+-	elif t=='t':
+-		output.append('<p>')
+-		output.extend(l)
 -		output.append('</p>')
--	elif l.startswith('='):
--		output.extend(['<div><code>',l,'</code></div>'])
--	elif l.startswith(('-','>')) and prev.startswith(('-','>')):
--		output.append(escape(l))
--	elif l.startswith(('-','>')) and not prev.startswith(('-','>')):
--		output.extend(['<div class="code closed" onclick="togglecode(this)"><pre onclick="ignore(arguments);">',l])
--	elif l.startswith("\t\t") and i<(len(code)-1) and code[i+1].strip()=='':
--		print('h2')
--		output.extend(['<h2>',l,'</h2>'])
--	elif (not len(prev)) or (prev[0] in '-=>'):
--		output.extend(['<p>',l])
+-	elif t=='c':
+-		output.append('<div class="code closed" onclick="togglecode(this)"><pre onclick="ignore(arguments);">')
+-		output.extend([escape(x) for x in l])
+-		output.append('</pre></div>')
+-	elif type(t)==tuple and t[0].startswith('=>'):
+-		output.append('<div><a href="'+t[0][2:]+'"><code>')
+-		output.extend(t[0][2:])
+-		output.append('</code></a></div>')
+-	elif type(t)==tuple and t[0].startswith('='):
+-		output.append('<div><code>')
+-		output.append(t[0][1:])
+-		output.append('</code></div>')
 -	else:
--		output.append(l)
--
--	prev=l
-
+-		output.append('<div style="color:red">')
+-		output.extend(l)
+-		output.append('</div>')
 
 		Styling
 
@@ -92,12 +126,14 @@
 -+"""</head><body>""")
 -output.append("""</body></html>""")
 
+		Whole code
+
 =>weave.py
 >open-file
 >process
-
+>collapse
+>generate
 >html
 
 >save-file
-
 
