@@ -1,0 +1,103 @@
+
+	Weave reads file named by first command-line argument and
+	produces html file named by second one.
+
+=open-file
+-from sys import argv
+-code=open(argv[1]).readlines()
+
+=save-file
+-of=open(argv[2],'w')
+-of.write(''.join(output))
+-of.close()
+
+	Normal text starts with single tab, paragraphs are separated
+	by an empty line.
+
+	Code starts with '-'.
+
+	Code block name starts with '='.
+
+=process
+-from cgi import escape
+
+-output=['<p>']
+-prev=''
+-for i in range(len(code)):
+-	l=code[i]
+
+-	if l.strip()=='' and (i==0 or prev.strip()!=''):
+-		continue
+
+-	if (not l.startswith(('-','>'))) and prev.startswith(('-','>')):
+-		output.append('</pre></div>')
+
+-	if l.strip()=='':
+-		output.append('</p>')
+-	elif l.startswith('='):
+-		output.extend(['<div><code>',l,'</code></div>'])
+-	elif l.startswith(('-','>')) and prev.startswith(('-','>')):
+-		output.append(escape(l))
+-	elif l.startswith(('-','>')) and not prev.startswith(('-','>')):
+-		output.extend(['<div class="code closed" onclick="togglecode(this)"><pre onclick="ignore(arguments);">',l])
+-	elif l.startswith("\t\t") and i<(len(code)-1) and code[i+1].strip()=='':
+-		print('h2')
+-		output.extend(['<h2>',l,'</h2>'])
+-	elif (not len(prev)) or (prev[0] in '-=>'):
+-		output.extend(['<p>',l])
+-	else:
+-		output.append(l)
+-
+-	prev=l
+
+
+		Styling
+
+	Some css to make it look better.
+
+=css
+-body{padding-left:6em;font:80% Verdana,sans-serif;width:35em}
+-div.code{border-left:1px dotted black;padding-left:1em;}
+-div.closed { cursor: pointer }
+-div.closed:before { content: "..." }
+-div.closed pre{display:none}
+
+		Javascript
+
+	By default code is hidden, open it by clicking on placeholder.
+
+=js
+-function togglecode(e) {
+-	e.className=e.className=='code open'?'code closed':'code open';
+-}
+
+-function ignore(a) {
+-	var e=a[0]||window.event;
+-	e.cancelBubble=true;
+-	e.stopPropagation();
+-}
+
+
+
+		HTML boilerplate
+
+=html
+-output.insert(0,"""<html><head>"""
+-+"""<style>
+>	css
+-</style>"""
+-+"""<script>
+>	js
+-</script>"""
+-+"""</head><body>""")
+-output.append("""</body></html>""")
+
+=>weave.py
+>open-file
+>process
+
+>html
+
+>save-file
+
+
