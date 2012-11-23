@@ -44,11 +44,20 @@
 -		ctype=ntype
 -	current.append(l)
 
-		Collapsing code
+		Code comments
 
-	Treat empty lines between code blocks as code
+	Include text (and empty lines) between code into code block.
 
-=collapse
+=comments
+-i=1
+-while i<(len(all)-1):
+-	if (all[i][0] in ('t','')) and all[i-1][0]=='c' and all[i+1][0]=='c':
+-		all[i-1][1].extend(all[i][1])
+-		all[i-1][1].extend(all[i+1][1])
+-		all.pop(i)
+-		all.pop(i)
+-		continue
+-	i+=1
 
 		Generating HTML
 
@@ -70,7 +79,10 @@
 -		output.append('</p>')
 -	elif t=='c':
 -		output.append('<div class="code closed" onclick="togglecode(this)"><pre onclick="ignore(arguments);">')
--		output.extend([escape(x) for x in l])
+-		try:
+-			output.extend([escape(x) for x in l])
+-		except:
+-			print(l)
 -		output.append('</pre></div>')
 -	elif type(t)==tuple and t[0].startswith('=>'):
 -		output.append('<div><a href="'+t[0][2:]+'"><code>')
@@ -131,7 +143,7 @@
 =>weave.py
 >open-file
 >process
->collapse
+>comments
 >generate
 >html
 
