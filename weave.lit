@@ -95,7 +95,7 @@
 -		output.extend([escape(x) for x in l])
 -		output.append('</pre></div>')
 -	elif t.startswith('=>'):
--		output.append('<div><a href="'+t[0][2:]+'"><code>')
+-		output.append('<div><a href="'+t[2:]+'"><code>')
 -		output.extend(t[2:])
 -		output.append('</code></a></div>')
 -	elif t.startswith('='):
