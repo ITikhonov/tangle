@@ -103,10 +103,11 @@
 
 =css
 -body{padding-left:6em;font:80% Verdana,sans-serif;width:35em}
--div.code{border-left:1px dotted black;padding-left:1em;}
--div.closed { cursor: pointer }
+-div.code{border-left:1px dotted black;padding-left:1em;cursor:pointer}
+-div.code pre{cursor:auto}
+-div.closed pre{display:none;cursor:auto}
 -div.closed:before { content: "..." }
--div.closed pre{display:none}
+-div.closed pre{display:none;cursor:auto}
 
 		Javascript
 
