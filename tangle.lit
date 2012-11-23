@@ -1,28 +1,28 @@
 =>tangle.py
 
-Getting filename to tangle from command-line.
+	Getting filename to tangle from command-line.
 
 -from sys import argv
 -f=open(argv[1])
 
-We will hold a dict of macros, represented as a list of lines each.
+	We will hold a dict of macros, represented as a list of lines each.
 
 -m={'stdout':[]}
 
-By default everything written into stdout macro, which we'll print out later.
+	By default everything written into stdout macro, which we'll print out later.
 -cm=m['stdout']
 
-Looping through all lines of file
+	Looping through all lines of file
 
 -while True:
 -	l=f.readline()
 -	if l=='': break
 
-When we encounter line starting from dash we append to currently selected macro
+	When we encounter line starting from dash we append to currently selected macro
 -	if l.startswith('-'):
 -		cm.append(l[1:])
 
-When we encounter equal sign we change macro, adding new if no one already
+	When we encounter equal sign we change macro, adding new if no one already
 -	elif l.startswith('='):
 -		name=l[1:].strip()
 -		cm=m.get(name)
@@ -30,20 +30,20 @@ When we encounter equal sign we change macro, adding new if no one already
 -			cm=[]
 -			m[name]=cm
 
-When we encounter > sign we insert macro tag for future expansion
+	When we encounter > sign we insert macro tag for future expansion
 
 -	elif l.startswith('>'):
 -		n=l[1:]
 -		cm.append((n.strip(),n[:-len(n.lstrip())]))
 
-Macro expander:
+	Macro expander:
 
 -def e(x,i=''):
 -	if type(x) is tuple: return e(m[x[0]],i+x[1])
 -	if type(x) is list: return ''.join([e(y,i) for y in x])
 -	return i+x
 
-Write out all macros:
+	Write out all macros:
 
 -for x,y in m.items():
 -	if x.startswith('>'): open(x[1:],'w').write(e(y))
