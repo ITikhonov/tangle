@@ -51,18 +51,25 @@
 	if between this code and previous code only text and empty lines,
 	squash them all into one code.
 
+	if between code and name is empty lines only, open code block by
+	default.
+
 =comments
 -i=1
 -while i<len(all):
 -	if all[i][0]=='c':
 -		for k in range(i-1,0,-1):
--			if all[k][0]=='c':
+-			if all[k][0].startswith('c'):
 -				for _,x in all[k+1:i+1]:
 -					all[k][1].extend(x)
 -				del all[k+1:i+1]
 -				i=k
 -				break
 -			elif all[k][0].startswith('='):
+-				if i-k==2 and all[i-1][0]=='':
+-					all[i]=('co',all[i][1])
+					break
+-	
 -				for _,x in reversed(all[k+1:i]):
 -					all[i][1][0:0]=x
 -				del all[k+1:i]
@@ -92,6 +99,10 @@
 -		output.append('</p>')
 -	elif t=='c':
 -		output.append('<div class="code closed" onclick="togglecode(this)"><pre onclick="ignore(arguments);">')
+-		output.extend([escape(x) for x in l])
+-		output.append('</pre></div>')
+-	elif t=='co':
+-		output.append('<div class="code open" onclick="togglecode(this)"><pre onclick="ignore(arguments);">')
 -		output.extend([escape(x) for x in l])
 -		output.append('</pre></div>')
 -	elif t.startswith('=>'):
