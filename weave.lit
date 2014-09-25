@@ -68,7 +68,7 @@
 -			elif all[k][0].startswith('='):
 -				if i-k==2 and all[i-1][0]=='':
 -					all[i]=('co',all[i][1])
-					break
+-					break
 -	
 -				for _,x in reversed(all[k+1:i]):
 -					all[i][1][0:0]=x
