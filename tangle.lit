@@ -66,27 +66,29 @@
 -		print('WARNING! Line before that probably should be code or have a blank line after:')
 -		print(l)
 
-
-
-	Macro expander:
-
--def e(x,i=''):
-
-That is a macro expand it into a list keeping indentation in mind. Only first word is
-a macro name, the rest is a commentary we ignore.
-
--	if type(x) is tuple: return e(m[x[0].split()[0]],i+x[1])
-
-This is a expanded macro expand it into a sting
-
--	if type(x) is list: return ''.join([e(y,i) for y in x])
-
-This is just a line of text, indent it and return as is
-
--	return i+x
+>002 definition of a macro expander function e()
 
 	Write out all files:
 
 -for x,y in m.items():
 -	if x.startswith('>'): open(x[1:],'w').write(e(y))
 
+
+
+	Macro expander:
+
+=002
+-def e(x,i=''):
+
+	That is a macro expand it into a list keeping indentation in mind. Only first word is
+	a macro name, the rest is a commentary we ignore.
+
+-	if type(x) is tuple: return e(m[x[0].split()[0]],i+x[1])
+
+	This is a expanded macro expand it into a sting
+
+-	if type(x) is list: return ''.join([e(y,i) for y in x])
+
+	This is just a line of text, indent it and return as is
+
+-	return i+x
