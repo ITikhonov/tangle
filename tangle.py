@@ -33,7 +33,7 @@ while True:
 		print('WARNING! Line before that probably should be code or have a blank line after:')
 		print(l)
 def e(x,i=''):
-	if type(x) is tuple: return e(m[x[0]],i+x[1])
+	if type(x) is tuple: return e(m[x[0].split()[0]],i+x[1])
 	if type(x) is list: return ''.join([e(y,i) for y in x])
 	return i+x
 for x,y in m.items():
