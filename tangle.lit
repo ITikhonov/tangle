@@ -33,10 +33,11 @@
 -	if l.startswith('-'):
 -		cm.append(l[1:])
 
-	When we encounter equal sign we change macro, adding new if no one already
+	When we encounter equal sign we change macro, adding new if no one already,
+	only the first word counts, the rest is a comment which is ignored.
 
 -	elif l.startswith('='):
--		name=l[1:].strip()
+-		name=l[1:].strip().split()[0]
 -		cm=m.get(name)
 -		if not cm:
 -			cm=[]

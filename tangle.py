@@ -14,7 +14,7 @@ while True:
 	if l.startswith('-'):
 		cm.append(l[1:])
 	elif l.startswith('='):
-		name=l[1:].strip()
+		name=l[1:].strip().split()[0]
 		cm=m.get(name)
 		if not cm:
 			cm=[]
